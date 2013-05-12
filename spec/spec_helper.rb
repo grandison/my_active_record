@@ -1,5 +1,7 @@
 require "my_active_record"
 require 'models/user.rb'
+require 'models/car.rb'
+require 'pry'
 
 RSpec.configure do |config|
   config.before do

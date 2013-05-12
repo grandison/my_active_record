@@ -8,7 +8,7 @@ module MyActiveRecord
     end
 
     def load_table_schema(table_name)
-      @table_schema ||= CSV.table(path_to_table(table_name)).headers
+      CSV.table(path_to_table(table_name)).headers
     end
 
     def table_schema(table_name)
@@ -17,11 +17,11 @@ module MyActiveRecord
 
     def where(table_name, params)
       results = []
-      CSV.foreach(path_to_table(table_name)) do |row|
-        params.each do |key,value|
-          next unless row[table_schema(table_name).find_index(key)].to_s == value.to_s
+      CSV.foreach(path_to_table(table_name), :headers => true) do |row|
+        all_terms_succeded = params.all? do |key,value|
+          row[table_schema(table_name).find_index(key.to_sym)].to_s == value.to_s
         end
-        results << row
+        results << row if all_terms_succeded
       end
       results
     end

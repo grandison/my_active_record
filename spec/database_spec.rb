@@ -6,7 +6,7 @@ describe MyActiveRecord::Database do
       User.methods.should include(:age)
     end
 
-    it "loads data" do
+    it "finds data" do
       User.find(1).full_name.should == "Pedro Rodriguez Ledesma"
     end
   end

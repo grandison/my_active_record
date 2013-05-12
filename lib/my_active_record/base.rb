@@ -1,9 +1,12 @@
 require 'rubygems'
 require 'active_support/all'
+require 'my_active_record/associations'
 
 module MyActiveRecord
   class Base
     extend ActiveSupport::DescendantsTracker
+    extend Associations
+
 
     class << self
       def initialize(params = {})
@@ -20,7 +23,7 @@ module MyActiveRecord
 
       def fields=(fields_list)
         fields_list.each do |field_name|
-          cattr_accessor field_name
+          attr_accessor field_name
         end
         @fields = fields_list
       end
