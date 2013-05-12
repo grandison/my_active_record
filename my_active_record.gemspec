@@ -7,5 +7,5 @@ Gem::Specification.new do |s|
   s.authors     = ["Alex Osmanov"]
   s.email       = 'grandison@mail.ru'
   s.files       = `git ls-files`.split("\n")
-  s.homepage    = 'http://rubygems.org/gems/my_active_record'
+  s.homepage    = 'https://github.com/grandison/my_active_record'
 end
