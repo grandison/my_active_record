@@ -7,16 +7,14 @@ module MyActiveRecord
     extend ActiveSupport::DescendantsTracker
     extend Associations
 
+    def initialize(params = {})
+      params.each do |key, value|
+        self[key] = value
+      end
+      self
+    end
 
     class << self
-      def initialize(params = {})
-        model = super
-        params.each do |key, value|
-          send("#{key}=", value)
-        end
-        model
-      end
-
       def table_name
         name.to_s.demodulize.underscore.pluralize
       end
@@ -43,9 +41,39 @@ module MyActiveRecord
       def load_data(data)
         model = new
         fields.each_with_index do |field_name,index|
-          model.send("#{field_name}=", data[index])
+          model[field_name] = data[index]
         end
         model
+      end
+
+      def create(params)
+        new(params).save
+      end
+
+      def last
+        Database.last(table_name)
+      end
+    end
+
+    def save
+      if self.id
+        Database.update(self.class.table_name, self)
+      else
+        Database.insert(self.class.table_name, self)
+      end
+    end
+
+    def [](key)
+      send(key)
+    end
+
+    def []=(key, value)
+      send("#{key}=", value)
+    end
+
+    def to_row 
+      self.class.fields.map do |field|
+        self[field]
       end
     end
   end

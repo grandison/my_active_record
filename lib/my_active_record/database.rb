@@ -33,6 +33,19 @@ module MyActiveRecord
           model.load_data(result)
         end
       end
+
+      def insert(table_name, model)
+        model.id = model.class.last.id.to_i + 1
+        @adapter.insert(table_name, model.to_row)
+      end
+
+      def update(table_name, model)
+        @adapter.update(table_name, model.to_row)
+      end
+
+      def last(table_name)
+        table_to_model(table_name).load_data(@adapter.last(table_name))
+      end
     end
   end
 end
