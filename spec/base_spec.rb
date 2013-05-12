@@ -14,5 +14,17 @@ describe MyActiveRecord::Base do
         user_without_car.car.should be_blank
       end
     end
+
+    context "#belongs_to" do
+      it "loads association from db" do
+        Car.find(1).user.name.should == "Pedro Rodriguez Ledesma"
+      end
+    end
+
+    context "#has_many" do
+      it "loads association from db" do
+        Car.find(1).details.map(&:name).should == ["Windscreen", "Brakes"]
+      end
+    end
   end
 end
