@@ -3,16 +3,20 @@ Yet another ORM working with CSV files.
 
 = Using
 
-require 'rubygems'
-require 'my_active_record'
-class Woman < MyActiveRecord::Base
-  has_many :clothes
-end
-class Cloth < MyActiveRecord::Base
-end
-MyActiveRecord::Database.establish_connection(:adapter => "csv", :db_path => "database")
-Woman.where(:eyes => "blue").clothes
+  require 'rubygems'
+  require 'my_active_record'
+
+  class Woman < MyActiveRecord::Base
+    has_many :clothes
+  end
+
+  class Cloth < MyActiveRecord::Base
+  end
+
+  MyActiveRecord::Database.establish_connection(:adapter => "csv", :db_path => "database")
+
+  Woman.where(:eyes => "blue").first.clothes
 
 = Test it
 
-rspec spec/
+  rspec spec/
