@@ -8,7 +8,10 @@ module MyActiveRecord
     end
 
     def load_table_schema(table_name)
-      CSV.table(path_to_table(table_name)).headers
+      raise("Csv file #{table_name}.csv should be created") unless File.exists?(path_to_table(table_name))
+      schema = CSV.table(path_to_table(table_name)).headers
+      raise("ID column should exist") unless schema.include?(:id)
+      schema
     end
 
     def where(table_name, params)

@@ -3,7 +3,7 @@ module MyActiveRecord
     class << self
       def establish_connection(params)
         if params.delete(:adapter) == "csv"
-          @adapter = MyActiveRecord::CsvAdapter.new(params)
+          self.adapter = MyActiveRecord::CsvAdapter.new(params)
         else
           raise "Unsupported adapter type"
         end
@@ -23,11 +23,11 @@ module MyActiveRecord
       end
 
       def load_table_schema(table_name)
-        table_to_model(table_name).fields = @adapter.load_table_schema(table_name)
+        table_to_model(table_name).fields = adapter.load_table_schema(table_name)
       end
 
       def where(table_name, params)
-        results = @adapter.where(table_name, params)
+        results = adapter.where(table_name, params)
         model   = table_to_model(table_name)
         results.map do |result|
           model.load_data(result)
@@ -36,15 +36,23 @@ module MyActiveRecord
 
       def insert(table_name, model)
         model.id = model.class.last.id.to_i + 1
-        @adapter.insert(table_name, model.to_row)
+        adapter.insert(table_name, model.to_row)
       end
 
       def update(table_name, model)
-        @adapter.update(table_name, model.to_row)
+        adapter.update(table_name, model.to_row)
       end
 
       def last(table_name)
-        table_to_model(table_name).load_data(@adapter.last(table_name))
+        table_to_model(table_name).load_data(adapter.last(table_name))
+      end
+
+      def adapter=(adapter)
+        @adapter = adapter
+      end
+
+      def adapter
+        @adapter || raise("Database adapter is not set")
       end
     end
   end
