@@ -1,4 +1,4 @@
-= My Active Admin
+= My Active Record
 Yet another ORM working with CSV files.
 
 = Using
